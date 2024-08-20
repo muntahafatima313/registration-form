@@ -1,42 +1,6 @@
-body{
-    background-image:url('./images/background.webp');
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-.regForm{
-    display: flex;
-    flex-direction: column;
-    width:400px;
-    box-shadow: 2px 2px white;
-    background: white;
-    padding: 20px ;
-    margin: 3% auto 0%;
-    text-align: center; 
-    border-radius: 20px;
-    align-items: center;
-}
-h1{
-    color: blue ;
-}
-input{
-    margin: 10px;
-    padding: 10px;
-    width: 70%;
-    align-items: center;
-    border-radius: 20px;
-    border: 1px solid #999;
-    outline: none;
-}
-button{
-    margin: 10px;
-    padding:20px;
-    background-color: blue;
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    outline: none;
-    border: none;
-    font-size: large;
-}
-span{
-    color: red;
-}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
