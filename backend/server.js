@@ -2,6 +2,7 @@ const express = require('express')
 const mysql=require('mysql')
 const cors=require('cors')
 const port=3001
+const bcrypt = require('bcrypt');
 
 const app = express()
 app.use(cors())
@@ -48,17 +49,27 @@ db.connect(err=>{
 
 app.post('/submit',(req,res)=>{
     const {firstName,lastName,email,password,conPassword}=req.body
-    const insertQuery=`INSERT INTO userdata(firstName,lastName,email,password,conPassword) VALUES(?,?,?,?,?)`
-
-    db.query(insertQuery,[firstName,lastName,email,password,conPassword],(err,result)=>{
+    const emailQueryCheck=`SELECT * FROM userdata WHERE email = ?`;
+    db.query(emailQueryCheck,[email],async(err,result)=>{
         if(err){
-            console.error('Error Inserting Data',err)
-            res.status(500).send('Error inserting data');
+            console.log('Error checking email',err);
+            return res.status(500).send('Error checking email');
         }
-        else{
-            console.log('Data inserted');
-            res.send('Form submitted successfully');
-        }
+        if(result.length>0){
+            return res.status(400).send('Email already exists');
+          }
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const insertQuery = `INSERT INTO userdata(firstName, lastName, email, password) VALUES(?, ?, ?, ?)`;
+          db.query(insertQuery, [firstName, lastName, email, hashedPassword], (err, result) => {
+            if (err) {
+                console.error('Error inserting data', err);
+                res.status(500).send('Error inserting data');
+              } else {
+                console.log('Data inserted');
+                res.send('Form submitted successfully');
+              }
+    })
+    
 
     })
 })

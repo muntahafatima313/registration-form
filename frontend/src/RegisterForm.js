@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import ApiService from "./ApiService";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField, Button,Alert } from "@mui/material";
 
 export default function RegisterForm() {
   const {
@@ -11,14 +11,15 @@ export default function RegisterForm() {
     reset,
   } = useForm();
 
+  const [alert,setAlert]=useState({message:"",type:""})
   const onSubmit = (data) => {
     ApiService("http://localhost:3001/submit", "POST", data)
       .then((message) => {
-        alert(message);
-
+        setAlert({message:"Registration Successful!",type:"success"})
         reset();
       })
       .catch((error) => {
+        setAlert({message:"API Call failed. Please try again",type:"error"})
         console.error("API call error", error);
       });
   };
@@ -61,6 +62,11 @@ export default function RegisterForm() {
           Registration Form
         </Typography>
 
+        {alert.message && (
+          <Alert severity={alert.type} onClose={()=>setAlert({message:"",type:""})}>
+            {alert.message}
+          </Alert>
+        )}
         <TextField
           label="First Name"
           variant="outlined"
